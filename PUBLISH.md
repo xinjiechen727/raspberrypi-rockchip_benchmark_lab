@@ -1,4 +1,4 @@
-# Publish to the two benchmark lab repositories
+# Publish the benchmark lab
 
 The GitHub connector may be read-only even if your GitHub user has admin permissions. Use the commands below from a local machine with Git configured and authenticated as `xinjiechen727`. Both destinations were empty when inspected on 2026-11-08.
 
@@ -27,6 +27,6 @@ The same commands work in a shell; `git init -b main` requires a recent Git vers
 
 ## Check success
 
-Confirm `README.md`, `scripts/`, `results/`, and `website/` appear at BOTH GitHub URLs. `website/index.html` is the current full landing page; `website/legacy-results.html` preserves the initial simpler prototype.
+Confirm `README.md`, `scripts/`, `decode/`, `results/`, and `website/` appear at the destination. `website/index.html` presents H.264 encoding, `website/hevc-decode.html` presents HEVC decoding, and `website/legacy-results.html` preserves the initial simpler encoding prototype.
 
 The ZIP excludes large videos, original source media, benchmark outputs, tokens, and local environment files.

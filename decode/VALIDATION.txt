@@ -1,0 +1,9 @@
+Repository validation updated 2026-11-12.
+Python compilation: PASS for bench.py, all three demos and test_accounting.py.
+Hardware-independent accounting tests: 5 passed.
+Raspberry Pi 5 and RK3588: the identical current bench.py, run.sh,
+demo_throughput.py and demo_parallel.py files were retrieved from ~/hevc-rt.
+The newer Pi 5 demo_hdmi.py was selected because it includes the tested
+Wayland discovery, Pi direct-KMS guard and headless fake-sink validation path.
+Published measurements and their limitations are documented in README.md and
+website/hevc-decode.html; no 30-minute stability result is claimed.

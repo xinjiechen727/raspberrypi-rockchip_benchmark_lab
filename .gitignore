@@ -5,4 +5,8 @@
 *.nv12
 *.mp4
 *.zip
+decode/*.json
+decode/source-*.mp4
 .DS_Store
+__pycache__/
+*.py[cod]

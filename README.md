@@ -1,10 +1,32 @@
-# Raspberry Pi 5 vs RK3588 — Reproducible 4K H.264 Encoding Benchmark
+# Raspberry Pi 5 vs RK3588 — Reproducible Video Benchmark Lab
 
-A small, reproducible benchmark case accompanying a Seeed Studio video comparing **Raspberry Pi 5 (16 GB)** with **Seeed reComputer RK3588 Devkit (16 GB)**. It tests CPU H.264 encoding using FFmpeg/libx264 on both boards, and dedicated Rockchip MPP H.264 hardware encoding on RK3588.
+A reproducible benchmark lab accompanying Seeed Studio videos comparing **Raspberry Pi 5 (16 GB)** with **Seeed reComputer RK3588 Devkit (16 GB)**. It now contains two independent cases:
 
-**[Open the standalone results dashboard](website/index.html)** — download the HTML file and open it directly in a desktop browser. It supports English/Chinese display and a 16:9 recording/presentation mode.
+- **4K H.264 encoding:** FFmpeg/libx264 on both boards and dedicated Rockchip MPP H.264 encoding on RK3588.
+- **4K60 HEVC decoding:** Raspberry Pi stateless V4L2 hardware decode versus Rockchip MPP, including unpaced throughput and paced multi-stream tests.
+
+- **[Open the H.264 encoding dashboard](website/index.html)**
+- **[Open the 4K60 HEVC decoding dashboard](website/hevc-decode.html)**
+
+Both pages are self-contained and can be downloaded and opened directly in a desktop browser.
 
 > **Results are observed measurements, not vendor specifications.** The source and raw input were byte-identical across boards. Tests use a fixed 10-second 4K animated clip, RAM-backed input, three repeats, and elapsed-time medians. Different encoders need not produce the same quality at a target bitrate.
+
+## HEVC decoding headline results
+
+The decode case uses the same verified 5-second HEVC Main 3840×2160@60 source on both boards and measures delivery to a GStreamer `appsink`.
+
+| Metric | Raspberry Pi 5 | RK3588 |
+|---|---:|---:|
+| Unpaced single-stream throughput, three-run median | 164.90 fps | **455.65 fps** |
+| 2×4K60 for 60 seconds | PASS, zero late frames | PASS, zero late frames |
+| 4×4K60 challenge | Real-time FAIL at 10 seconds | **PASS at 60 seconds** |
+
+See [`decode/README.md`](decode/README.md) for code, final single-run commands, requirements and limitations. The detailed interactive report is [`website/hevc-decode.html`](website/hevc-decode.html).
+
+The unpaced fps/60 values are rate equivalents, not validated concurrency counts. The 4-stream challenge durations differ intentionally. No 30-minute stability, HDMI timing, pixel-level correctness, power or thermal result is claimed.
+
+## H.264 encoding headline results
 
 ## Headline results
 
@@ -36,7 +58,7 @@ The sample is the [Blender Foundation Big Buck Bunny Sunflower 2160p30](https://
 | Raspberry Pi 5, 16 GB | Debian 13 Trixie, FFmpeg 7.1.5 | libx264 software, 4 encoding threads |
 | Seeed reComputer RK3588 Devkit, 16 GB | Armbian 26.8.7 (Ubuntu 26.04), vendor kernel 6.1.172, Rockchip MPP 1.5.0-1 plugin | libx264 or GStreamer `mpph264enc` |
 
-The Pi 5 has no built-in H.264 hardware encoder; **MPP is Rockchip-specific** and is not a Raspberry Pi encoder. This example does not benchmark HEVC decode, AV1, camera pipeline power, video capture, or whole-device power.
+The Pi 5 has no built-in H.264 hardware encoder; **MPP is Rockchip-specific** and is not a Raspberry Pi encoder. This encoding case does not benchmark AV1, camera pipeline power, video capture, or whole-device power. HEVC decoding is covered separately under `decode/`.
 
 ## Reproduce
 
@@ -78,6 +100,9 @@ All codec commands intentionally operate on `/dev/shm/rkpi_real_4k_10s.nv12` so 
 | `results/runs.csv` | Original per-run wall times and process CPU percentages |
 | `results/summary.csv` | Published benchmark medians, fps and SSIM values |
 | `website/index.html` | Self-contained offline bilingual HTML result presentation |
+| `decode/` | Final HEVC hardware-decode benchmark and demo code |
+| `decode/README.md` | Decode reproduction guide, commands, methodology and limitations |
+| `website/hevc-decode.html` | Self-contained 4K60 HEVC decode result presentation |
 
 ## Limitations and attribution
 
